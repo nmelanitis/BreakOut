@@ -7,8 +7,9 @@ not host a public service or include Spotify credentials.
 ## For beta testers
 
 1. Download the ZIP for your operating system from the **Desktop Beta Build** workflow artifacts.
-2. Extract it and run `BreakOut` (`BreakOut.exe` on Windows). macOS may ask you to confirm that
-   you want to open an app downloaded from the internet.
+2. Extract it and launch the application: double-click `BreakOut.app` on macOS, `BreakOut.exe` on
+   Windows, or `BreakOut` on Linux. It starts immediately; do not add `serve` or other arguments.
+   macOS may ask you to confirm that you want to open an app downloaded from the internet.
 3. The BreakOut setup page opens in your browser. Create your own Spotify developer app, add the
    displayed callback address, and paste only that app’s Client ID.
 4. Connect Spotify and export your library. The browser downloads the resulting ZIP archive.
@@ -25,5 +26,6 @@ uv sync --group desktop
 uv run pyinstaller --noconfirm --clean breakout.spec
 ```
 
-The output is one executable in `dist/`. PyInstaller must build each operating system’s artifact
-on that operating system; the GitHub workflow provides the macOS, Windows, and Linux build matrix.
+The output is `dist/BreakOut.app` on macOS, `dist/BreakOut.exe` on Windows, or `dist/BreakOut` on
+Linux. PyInstaller must build each operating system’s artifact on that operating system; the
+GitHub workflow provides the macOS, Windows, and Linux build matrix.

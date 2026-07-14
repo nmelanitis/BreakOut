@@ -36,10 +36,16 @@ jobs:
           python-version: "3.12"
       - name: Install desktop build dependencies
         run: uv sync --group desktop --locked
-      - name: Build one-file executable
+      - name: Build desktop application
         run: uv run pyinstaller --noconfirm --clean breakout.spec
-      - name: Package macOS/Linux executable
-        if: runner.os != 'Windows'
+      - name: Package macOS application
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          cd dist
+          ditto -c -k --sequesterRsrc --keepParent BreakOut.app "../${{ matrix.artifact }}.zip"
+      - name: Package Linux executable
+        if: runner.os == 'Linux'
         shell: bash
         run: |
           cd dist

@@ -2,6 +2,7 @@
 """Cross-platform one-file package for the local BreakOut desktop beta."""
 
 from pathlib import Path
+import sys
 
 from PyInstaller.utils.hooks import collect_submodules
 
@@ -24,16 +25,42 @@ a = Analysis(
     noarchive=False,
 )
 pyz = PYZ(a.pure)
-exe = EXE(
-    pyz,
-    a.scripts,
-    a.binaries,
-    a.datas,
-    [],
-    name="BreakOut",
-    debug=False,
-    bootloader_ignore_signals=False,
-    strip=False,
-    upx=True,
-    console=True,
-)
+
+# Finder expects a macOS application bundle rather than a bare Unix executable.
+# A bundle must use PyInstaller's onedir layout; other platforms keep the native
+# one-file executable used by the beta workflow.
+if sys.platform == "darwin":
+    exe = EXE(
+        pyz,
+        a.scripts,
+        [],
+        exclude_binaries=True,
+        name="BreakOut",
+        debug=False,
+        bootloader_ignore_signals=False,
+        strip=False,
+        upx=True,
+        console=True,
+    )
+    app = BUNDLE(
+        exe,
+        a.binaries,
+        a.datas,
+        name="BreakOut.app",
+        icon=None,
+        bundle_identifier="com.breakout.local",
+    )
+else:
+    exe = EXE(
+        pyz,
+        a.scripts,
+        a.binaries,
+        a.datas,
+        [],
+        name="BreakOut",
+        debug=False,
+        bootloader_ignore_signals=False,
+        strip=False,
+        upx=True,
+        console=True,
+    )

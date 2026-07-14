@@ -1,6 +1,6 @@
-"""PyInstaller entry point for the local BreakOut desktop executable."""
+"""PyInstaller entry point for the local BreakOut desktop application."""
 
-from breakout.cli import main
+from breakout.cli import serve
 
 if __name__ == "__main__":
-    main()
+    serve()

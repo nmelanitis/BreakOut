@@ -53,8 +53,9 @@ uv sync --group desktop
 uv run pyinstaller --noconfirm --clean breakout.spec
 ```
 
-The executable is written to `dist/BreakOut` on macOS/Linux or `dist/BreakOut.exe` on Windows.
-Run it directly; it launches the browser dashboard automatically.
+The desktop application is written to `dist/BreakOut.app` on macOS, `dist/BreakOut.exe` on
+Windows, or `dist/BreakOut` on Linux. Run it directly; it launches the browser dashboard
+automatically—no `serve` argument is needed.
 
 ## Spotify setup
 
