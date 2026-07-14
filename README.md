@@ -57,6 +57,9 @@ The desktop application is written to `dist/BreakOut.app` on macOS, `dist/BreakO
 Windows, or `dist/BreakOut` on Linux. Run it directly; it launches the browser dashboard
 automatically—no `serve` argument is needed.
 
+Use **Quit BreakOut** in the dashboard when finished. Closing the browser alone leaves the local
+application running, so you can return to it at `http://127.0.0.1:3000`.
+
 ## Spotify setup
 
 Create a Spotify developer application, register this redirect URI exactly, then paste its

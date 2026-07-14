@@ -9,8 +9,14 @@
   <body>
     <main class="shell">
       <header>
-        <a class="brand" href="/">BreakOut</a>
+        <div class="header-row">
+          <a class="brand" href="/">BreakOut</a>
+          <form class="quit-form" method="post" action="/shutdown" onsubmit="return confirm('Quit BreakOut and stop the local server?');">
+            <button class="quit-button" type="submit">Quit BreakOut</button>
+          </form>
+        </div>
         <p>Local, portable library exports</p>
+        <p class="running-note">Closing this browser does not stop BreakOut. Use <strong>Quit BreakOut</strong> when you are done.</p>
       </header>
       {% block content %}{% endblock %}
     </main>

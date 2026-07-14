@@ -13,6 +13,8 @@ not host a public service or include Spotify credentials.
 3. The BreakOut setup page opens in your browser. Create your own Spotify developer app, add the
    displayed callback address, and paste only that app’s Client ID.
 4. Connect Spotify and export your library. The browser downloads the resulting ZIP archive.
+5. When finished, click **Quit BreakOut** in the dashboard. Closing the browser alone leaves the
+   local application running so you can return to it at `http://127.0.0.1:3000`.
 
 Every tester uses their own Spotify developer app. Never distribute a shared Client ID or a Client
 Secret, and never enter a Client Secret into BreakOut.

@@ -3,8 +3,10 @@
 body { margin: 0; }
 .shell { width: min(760px, calc(100% - 32px)); margin: 0 auto; padding: 48px 0 72px; }
 header { margin-bottom: 28px; }
+.header-row { align-items: center; display: flex; justify-content: space-between; gap: 16px; }
 .brand { color: #138a5d; font-weight: 800; font-size: 1.65rem; text-decoration: none; }
 header p, .hint { color: #657084; margin: 6px 0 0; }
+.running-note { font-size: .85rem; }
 .card { background: white; border: 1px solid #e3e8ef; border-radius: 14px; padding: 28px; box-shadow: 0 8px 30px rgb(21 31 45 / 5%); margin: 16px 0; }
 .subtle { background: #fbfcfe; }
 h1 { margin: 0 0 12px; font-size: 1.55rem; }
@@ -39,10 +41,13 @@ button, .button { display: inline-block; border: 0; border-radius: 8px; backgrou
 button:disabled { opacity: .6; cursor: wait; }
 button.secondary { margin-top: 0; background: #e9eef3; color: #263548; }
 .inline-form { display: inline; margin: 0 0 0 12px; }
+.quit-form { margin: 0; }
+.quit-button { background: transparent; border: 1px solid #b9c3d1; color: #354257; margin: 0; padding: 7px 10px; }
+.quit-button:hover { background: #f1f4f7; }
 .link-button { background: transparent; color: #526174; padding: 0; text-decoration: underline; font-weight: 500; }
 .notice { padding: 12px 14px; border-radius: 8px; margin-bottom: 16px; }
 .success { background: #e5f6ef; color: #08683f; }.error, .job-error { background: #fff0f0; color: #9b1c1c; }
 .connected-heading { display: flex; align-items: start; justify-content: space-between; gap: 16px; }.connected-heading h1 { margin-bottom: 0; }
 .eyebrow { margin: 0 0 3px; color: #657084; font-size: .85rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
 .job { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 22px; padding: 16px; border-radius: 8px; background: #f1f7f4; }.job p { width: 100%; margin: 0; }
-@media (max-width: 520px) { .shell { padding-top: 28px; }.card { padding: 20px; }.connected-heading { display: block; }.connected-heading form { margin-top: 12px; }.copy-field { align-items: stretch; flex-direction: column; }.copy-button { width: 100%; } }
+@media (max-width: 520px) { .shell { padding-top: 28px; }.card { padding: 20px; }.connected-heading { display: block; }.connected-heading form { margin-top: 12px; }.copy-field { align-items: stretch; flex-direction: column; }.copy-button { width: 100%; }.header-row { align-items: start; }.quit-button { white-space: nowrap; } }

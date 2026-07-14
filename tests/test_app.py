@@ -74,6 +74,23 @@ def test_setup_screen_displays_required_authentication_guidance(tmp_path: Path) 
     assert "Save Client ID and continue" in response.text
     assert "Do not replace" in response.text
     assert "Your Spotify password is entered only on Spotify’s website" in response.text
+    assert "Quit BreakOut" in response.text
+    assert "Closing this browser does not stop BreakOut" in response.text
+
+
+def test_quit_requests_local_shutdown(tmp_path: Path) -> None:
+    shutdown_requests = []
+    app = create_app(
+        state=LocalState(tmp_path / "state.sqlite3"),
+        shutdown_callback=lambda: shutdown_requests.append(True),
+    )
+
+    with TestClient(app) as client:
+        response = client.post("/shutdown", follow_redirects=False)
+
+    assert response.status_code == 303
+    assert response.headers["location"] == "/?message=BreakOut+is+closing."
+    assert shutdown_requests == [True]
 
 
 def test_browser_setup_oauth_and_export_download(tmp_path: Path) -> None:

@@ -4,13 +4,15 @@ from __future__ import annotations
 
 import base64
 import hashlib
+import os
 import secrets
+import signal
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 from urllib.parse import urlencode
 
-from fastapi import FastAPI, Form, HTTPException, Request
+from fastapi import BackgroundTasks, FastAPI, Form, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -71,6 +73,11 @@ def _safe_client_id(client_id: str) -> str | None:
     return candidate
 
 
+def _stop_local_process() -> None:
+    """Ask the Uvicorn process to stop after the quit response is sent."""
+    os.kill(os.getpid(), signal.SIGTERM)
+
+
 def create_app(
     *,
     state: LocalState | None = None,
@@ -78,6 +85,7 @@ def create_app(
     connector_factory: Callable[[str], SourceConnector] | None = None,
     jobs: JobManager | None = None,
     sessions: MemorySessions | None = None,
+    shutdown_callback: Callable[[], None] | None = None,
 ) -> FastAPI:
     app = FastAPI(title="BreakOut", docs_url=None, redoc_url=None)
     app.add_middleware(
@@ -93,6 +101,7 @@ def create_app(
     make_connector = connector_factory or (lambda token: SpotifyConnector(token))
     job_manager = jobs or JobManager()
     memory_sessions = sessions or MemorySessions()
+    request_shutdown = shutdown_callback or _stop_local_process
 
     def browser_session(request: Request) -> tuple[str, BrowserSession]:
         session_id = request.session.get("breakout_session_id")
@@ -114,6 +123,11 @@ def create_app(
             message=request.query_params.get("message"),
             error=request.query_params.get("error"),
         )
+
+    @app.post("/shutdown")
+    async def shutdown_breakout(background_tasks: BackgroundTasks):
+        background_tasks.add_task(request_shutdown)
+        return RedirectResponse("/?message=BreakOut+is+closing.", status_code=303)
 
     @app.post("/setup/spotify")
     async def save_spotify_setup(request: Request, client_id: str = Form(...)):
