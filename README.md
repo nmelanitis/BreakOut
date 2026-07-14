@@ -46,6 +46,21 @@ share a Spotify Client ID or Client Secret with other users, and do not enter a 
 BreakOut. This avoids operating a shared Spotify beta app and keeps every user’s authorization
 separate.
 
+### macOS: allow BreakOut on first launch
+
+The beta is downloaded from GitHub rather than the Mac App Store and is not yet notarized by
+Apple. macOS may block it the first time you open it.
+
+1. Extract `BreakOut-macOS.zip`, then try to open `BreakOut.app` once. If macOS refuses to open
+   it, dismiss the warning.
+2. Open **Apple menu → System Settings → Privacy & Security** and scroll to **Security**.
+3. Click **Open Anyway** beside the BreakOut warning, then confirm **Open** and enter your Mac
+   password if requested.
+
+macOS remembers this choice for BreakOut, so subsequent launches work normally. Only approve the
+app when you downloaded it from the official BreakOut GitHub release. Apple documents the same
+process in its [macOS security guidance](https://support.apple.com/102445).
+
 To build a local desktop executable from source:
 
 ```sh
