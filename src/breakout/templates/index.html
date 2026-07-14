@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% block title %}BreakOut{% endblock %}
+{% block content %}
+  {% if message %}<div class="notice success">{{ message }}</div>{% endif %}
+  {% if error %}<div class="notice error">{{ error }}</div>{% endif %}
+
+  {% if not client_id_configured %}
+    <section class="onboarding-intro">
+      <p class="eyebrow">First-time setup</p>
+      <h1>Connect your Spotify library</h1>
+      <p class="lede">BreakOut needs a Spotify Developer Client ID before it can safely open Spotify’s sign-in page. This takes about two minutes and is needed only once on this computer.</p>
+      <div class="onboarding-meta" aria-label="Setup overview">
+        <span>About 2 minutes</span>
+        <span>Read-only access</span>
+        <span>Stored locally</span>
+      </div>
+    </section>
+
+    <section class="card setup" aria-labelledby="setup-steps-title">
+      <div class="section-heading">
+        <div class="step-number">1</div>
+        <div>
+          <p class="eyebrow">Spotify Developer Dashboard</p>
+          <h2 id="setup-steps-title">Create your Spotify developer app</h2>
+        </div>
+      </div>
+      <ol class="setup-steps">
+        <li><a href="https://developer.spotify.com/dashboard" target="_blank" rel="noreferrer">Open the Spotify Developer Dashboard</a> and sign in with the Spotify account you want to export.</li>
+        <li>Select <strong>Create app</strong>. You can name it <strong>BreakOut</strong>; the description can be anything helpful to you.</li>
+        <li>Open the app’s settings and add the Redirect URI below exactly as shown, then save the settings.</li>
+        <li>Copy the app’s <strong>Client ID</strong>. Do not copy or enter its Client Secret in BreakOut.</li>
+      </ol>
+
+      <aside class="callout info">
+        <strong>Why this is needed</strong>
+        <p>A Client ID identifies your personal BreakOut integration to Spotify. It is not a password and is safe to store locally.</p>
+      </aside>
+    </section>
+
+    <section class="card callback-card" aria-labelledby="callback-title">
+      <div class="section-heading">
+        <div class="step-number">2</div>
+        <div>
+          <p class="eyebrow">Important</p>
+          <h2 id="callback-title">Register this callback address</h2>
+        </div>
+      </div>
+      <p>This application runs locally on your computer and is not exposed through a public web server.</p>
+      <p>Add the following Redirect URI to your Spotify developer app exactly as displayed:</p>
+      <div class="copy-field">
+        <code id="redirect-uri">http://127.0.0.1:3000/auth/spotify/callback</code>
+        <button id="copy-redirect-uri" class="secondary copy-button" type="button">Copy</button>
+      </div>
+      <p>Spotify will use this address to return your browser to the locally running application after you approve access.</p>
+      <aside class="callout warning">
+        <strong>Use this address exactly</strong>
+        <p>Do not replace <code>127.0.0.1</code> with <code>localhost</code>. Your Spotify password is entered only on Spotify’s website and is never shared with this application.</p>
+      </aside>
+    </section>
+
+    <section class="card" aria-labelledby="client-id-title">
+      <div class="section-heading">
+        <div class="step-number">3</div>
+        <div>
+          <p class="eyebrow">Back in BreakOut</p>
+          <h2 id="client-id-title">Paste your Client ID</h2>
+        </div>
+      </div>
+      <form method="post" action="/setup/spotify">
+        <label for="client_id">Spotify Client ID</label>
+        <input id="client_id" name="client_id" required autocomplete="off" spellcheck="false" placeholder="Paste your Client ID">
+        <p class="hint">BreakOut stores this public identifier only on this computer. Your Spotify password and access token are never saved.</p>
+        <button type="submit">Save Client ID and continue</button>
+      </form>
+    </section>
+    <script>
+      const copyButton = document.querySelector('#copy-redirect-uri');
+      copyButton.addEventListener('click', async () => {
+        await navigator.clipboard.writeText(document.querySelector('#redirect-uri').textContent);
+        copyButton.textContent = 'Copied';
+        window.setTimeout(() => { copyButton.textContent = 'Copy'; }, 1800);
+      });
+    </script>
+  {% elif not profile %}
+    <section class="card">
+      <h1>Connect Spotify</h1>
+      <p>BreakOut is ready to ask Spotify for read-only access to your library.</p>
+      <a class="button" href="/auth/spotify/start">Connect Spotify</a>
+      <form class="inline-form" method="post" action="/setup/reset">
+        <button class="link-button" type="submit">Change Spotify Client ID</button>
+      </form>
+    </section>
+  {% else %}
+    <section class="card">
+      <div class="connected-heading">
+        <div>
+          <p class="eyebrow">Connected Spotify account</p>
+          <h1>{{ profile.display_name }}</h1>
+        </div>
+        <form method="post" action="/auth/spotify/disconnect"><button class="secondary" type="submit">Disconnect</button></form>
+      </div>
+      <p>Export playlists, saved music, followed artists, podcasts, and audiobooks into portable JSON and CSV tables.</p>
+      <button id="start-export" type="button">Create export</button>
+      <div id="job" class="job" hidden aria-live="polite"></div>
+    </section>
+    <section class="card subtle">
+      <h2>Export contents</h2>
+      <p>Every ZIP contains <code>archive.json</code>, its schema, a manifest, and one UTF-8 CSV table per collection. Spotify media and artwork are never downloaded.</p>
+    </section>
+    <script>
+      const button = document.querySelector('#start-export');
+      const jobElement = document.querySelector('#job');
+      function render(job) {
+        jobElement.hidden = false;
+        let html = `<strong>${job.phase}</strong>`;
+        if (job.total !== null) html += `<span>${job.completed} / ${job.total}</span>`;
+        if (job.error) html += `<p class="job-error">${job.error}</p>`;
+        if (job.warnings && job.warnings.length) html += `<p>${job.warnings.length} item or collection warning(s) were recorded.</p>`;
+        if (job.download_url) html += `<a class="button" href="${job.download_url}">Download ZIP export</a>`;
+        jobElement.innerHTML = html;
+      }
+      async function poll(jobId) {
+        const response = await fetch(`/exports/${jobId}`);
+        const job = await response.json();
+        render(job);
+        if (job.status === 'queued' || job.status === 'running') window.setTimeout(() => poll(jobId), 700);
+        else button.disabled = false;
+      }
+      button.addEventListener('click', async () => {
+        button.disabled = true;
+        const response = await fetch('/exports', {method: 'POST'});
+        const job = await response.json();
+        render(job);
+        if (!response.ok) { button.disabled = false; return; }
+        poll(job.id);
+      });
+    </script>
+  {% endif %}
+{% endblock %}

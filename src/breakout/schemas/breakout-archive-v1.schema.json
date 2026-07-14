@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://breakout.local/schemas/breakout-archive-v1.schema.json",
+  "title": "BreakOut Archive v1.0",
+  "type": "object",
+  "required": ["schema_version", "exported_at", "source", "collections", "warnings"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "exported_at": {"type": "string", "format": "date-time"},
+    "source": {
+      "type": "object",
+      "required": ["service", "account"],
+      "properties": {
+        "service": {"type": "string", "minLength": 1},
+        "account": {"type": "object"}
+      },
+      "additionalProperties": false
+    },
+    "collections": {
+      "type": "object",
+      "additionalProperties": {"type": "array", "items": {"type": "object"}}
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["code", "message"],
+        "properties": {
+          "code": {"type": "string"},
+          "message": {"type": "string"},
+          "collection": {"type": ["string", "null"]},
+          "resource_id": {"type": ["string", "null"]},
+          "status_code": {"type": ["integer", "null"]}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,48 @@
+:root { color-scheme: light; font-family: Inter, ui-sans-serif, system-ui, sans-serif; color: #18212f; background: #f5f7fa; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+.shell { width: min(760px, calc(100% - 32px)); margin: 0 auto; padding: 48px 0 72px; }
+header { margin-bottom: 28px; }
+.brand { color: #138a5d; font-weight: 800; font-size: 1.65rem; text-decoration: none; }
+header p, .hint { color: #657084; margin: 6px 0 0; }
+.card { background: white; border: 1px solid #e3e8ef; border-radius: 14px; padding: 28px; box-shadow: 0 8px 30px rgb(21 31 45 / 5%); margin: 16px 0; }
+.subtle { background: #fbfcfe; }
+h1 { margin: 0 0 12px; font-size: 1.55rem; }
+h2 { font-size: 1.1rem; margin-top: 0; }
+p { line-height: 1.55; }
+.onboarding-intro { padding: 8px 0 8px; }
+.onboarding-intro h1 { font-size: clamp(2rem, 5vw, 2.7rem); line-height: 1.08; margin: 5px 0 14px; letter-spacing: -.04em; }
+.lede { color: #526174; font-size: 1.08rem; margin: 0; max-width: 640px; }
+.onboarding-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.onboarding-meta span { background: #e6f5ee; border-radius: 999px; color: #087044; font-size: .85rem; font-weight: 700; padding: 6px 10px; }
+.section-heading { display: flex; align-items: center; gap: 13px; margin-bottom: 18px; }
+.section-heading h2 { margin: 1px 0 0; }
+.section-heading .eyebrow { margin: 0; }
+.step-number { align-items: center; background: #138a5d; border-radius: 50%; color: white; display: flex; flex: 0 0 32px; font-size: .95rem; font-weight: 800; height: 32px; justify-content: center; }
+.setup-steps { color: #354257; margin: 0; padding-left: 24px; }
+.setup-steps li { line-height: 1.58; margin: 10px 0; padding-left: 4px; }
+.setup-steps a { color: #08744a; font-weight: 750; }
+.callout { border-radius: 9px; margin-top: 22px; padding: 14px 16px; }
+.callout p { margin: 4px 0 0; }
+.callout.info { background: #edf7f2; border-left: 4px solid #47a77c; color: #17533d; }
+.callout.warning { background: #fff7e8; border-left: 4px solid #e4a633; color: #644613; }
+.callback-card { border-color: #d8e6df; }
+.copy-field { align-items: center; background: #f1f4f7; border: 1px solid #dde4eb; border-radius: 9px; display: flex; gap: 10px; justify-content: space-between; padding: 9px 10px 9px 14px; }
+.copy-field code { overflow-wrap: anywhere; }
+.copy-button { flex: 0 0 auto; margin: 0; padding: 8px 12px; }
+pre { overflow-x: auto; padding: 14px; background: #f1f4f7; border-radius: 8px; }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+form { margin-top: 24px; }
+label { font-weight: 700; display: block; margin-bottom: 8px; }
+input { width: 100%; padding: 11px 12px; font: inherit; border: 1px solid #b9c3d1; border-radius: 8px; }
+button, .button { display: inline-block; border: 0; border-radius: 8px; background: #138a5d; color: white; padding: 11px 15px; margin-top: 14px; font: inherit; font-weight: 700; text-decoration: none; cursor: pointer; }
+button:disabled { opacity: .6; cursor: wait; }
+button.secondary { margin-top: 0; background: #e9eef3; color: #263548; }
+.inline-form { display: inline; margin: 0 0 0 12px; }
+.link-button { background: transparent; color: #526174; padding: 0; text-decoration: underline; font-weight: 500; }
+.notice { padding: 12px 14px; border-radius: 8px; margin-bottom: 16px; }
+.success { background: #e5f6ef; color: #08683f; }.error, .job-error { background: #fff0f0; color: #9b1c1c; }
+.connected-heading { display: flex; align-items: start; justify-content: space-between; gap: 16px; }.connected-heading h1 { margin-bottom: 0; }
+.eyebrow { margin: 0 0 3px; color: #657084; font-size: .85rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
+.job { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 22px; padding: 16px; border-radius: 8px; background: #f1f7f4; }.job p { width: 100%; margin: 0; }
+@media (max-width: 520px) { .shell { padding-top: 28px; }.card { padding: 20px; }.connected-heading { display: block; }.connected-heading form { margin-top: 12px; }.copy-field { align-items: stretch; flex-direction: column; }.copy-button { width: 100%; } }
