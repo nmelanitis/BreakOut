@@ -61,6 +61,7 @@ macOS remembers this choice for BreakOut, so subsequent launches work normally. 
 app when you downloaded it from the official BreakOut GitHub release. Apple documents the same
 process in its [macOS security guidance](https://support.apple.com/102445).
 
+### Build a local executable from source
 To build a local desktop executable from source:
 
 ```sh
