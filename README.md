@@ -35,6 +35,27 @@ uv run breakout serve
 
 Open `http://127.0.0.1:3000` if the browser does not open automatically.
 
+## Desktop beta
+
+BreakOut is designed to run locally: the desktop app starts a server bound only to
+`127.0.0.1` and opens the dashboard in your browser. Prebuilt macOS, Windows, and Linux beta
+downloads are produced by the GitHub Actions **Desktop Beta Build** workflow.
+
+Each beta tester must create and use their **own Spotify developer app and Client ID**. Do not
+share a Spotify Client ID or Client Secret with other users, and do not enter a Client Secret into
+BreakOut. This avoids operating a shared Spotify beta app and keeps every user’s authorization
+separate.
+
+To build a local desktop executable from source:
+
+```sh
+uv sync --group desktop
+uv run pyinstaller --noconfirm --clean breakout.spec
+```
+
+The executable is written to `dist/BreakOut` on macOS/Linux or `dist/BreakOut.exe` on Windows.
+Run it directly; it launches the browser dashboard automatically.
+
 ## Spotify setup
 
 Create a Spotify developer application, register this redirect URI exactly, then paste its
